@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>השער - קודקס מונחי משחקי תפקידים</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/jpeg" href="image_e42063.jpg">
+    
+    <style>
+        body { font-family: 'Assistant', sans-serif; direction: rtl; text-align: right; }
+        .modal-content { max-height: 80vh; overflow-y: auto; box-shadow: 0 5px 20px rgba(120, 53, 15, 0.5); border: 4px solid #78350f; }
+        .nav-link-codex { color: #facc15; font-weight: bold; }
+    </style>
+</head>
+<body class="bg-stone-100 text-gray-900 flex flex-col min-h-screen">
+
+<!-- ה-Header יוזרק לכאן אוטומטית ע"י layout.js -->
+
+<main class="flex-grow">
+    <!-- סרגל חיפוש וסינון פנימי לקודקס -->
+    <section class="mb-8 p-4 bg-stone-200 shadow-md border-b-4 border-amber-900 mt-0">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <h2 class="text-3xl font-bold text-amber-900">קודקס מונחים</h2>
+            <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto">
+                <input type="text" id="search-input" placeholder="חפש מילה..." class="flex-1 md:w-64 p-3 border-2 border-amber-900 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-amber-700 transition rounded-sm">
+                <select id="tag-filter" class="p-3 border-2 border-amber-900 bg-white text-gray-900 focus:outline-none focus:ring-4 focus:ring-amber-700 transition rounded-sm">
+                    <option value="" class="bg-white">כל הנושאים</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <div class="container mx-auto p-4 md:p-8">
+        <div id="dictionary-grid" class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+        <p id="loading-message" class="text-center text-lg text-amber-900 mt-12">טוען נתונים קריטיים...</p>
+        <p id="no-results-message" class="text-center text-lg text-red-700 mt-12 hidden">😔 לא נמצאו רשומות תואמות לקודקס הנתונים.</p>
+    </div>
+</main>
+
+<!-- Modal -->
+<div id="word-modal" class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-[70] p-4 hidden">
+    <div class="modal-content bg-stone-50 w-full max-w-2xl rounded-sm shadow-2xl p-6 transition-all transform scale-100">
+        <div class="flex justify-between items-start border-b border-amber-900 pb-3 mb-4">
+            <h2 id="modal-title" class="text-3xl font-bold text-amber-900"></h2>
+            <button id="close-modal" class="text-gray-600 hover:text-amber-900 text-3xl font-light leading-none pr-2 transition duration-200">&times;</button>
+        </div>
+        <div id="modal-body"></div>
+    </div>
+</div>
+
+<!-- ה-Footer יוזרק לכאן אוטומטית ע"י layout.js -->
+
+<script src="layout.js"></script>
+
+<script>
+    let dictionaryData = []; 
+    const gridContainer = document.getElementById('dictionary-grid');
+    const searchInput = document.getElementById('search-input');
+    const tagFilter = document.getElementById('tag-filter');
+    const modal = document.getElementById('word-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalBody = document.getElementById('modal-body');
+    const closeButton = document.getElementById('close-modal');
+    const loadingMessage = document.getElementById('loading-message');
+    const noResultsMessage = document.getElementById('no-results-message');
+
+    function createCardHtml(item) {
+        return `
+            <div data-id="${encodeURIComponent(item.word)}" class="word-card bg-stone-50 p-5 border-2 border-amber-900 rounded-sm shadow-[0_5px_15px_rgba(120,53,15,0.2)] hover:shadow-[0_8px_20px_rgba(120,53,15,0.4)] hover:scale-[1.02] transition transform duration-300 cursor-pointer">
+                <h2 class="main-word text-2xl font-extrabold text-amber-900 mb-2">${item.word}</h2>
+                <div class="tags-list mb-3 flex flex-wrap gap-y-1">
+                    ${item.tags.slice(0,3).map(tag => `<span class="tag inline-block bg-red-900/10 text-red-700 text-xs px-2.5 py-0.5 rounded-sm ml-2">${tag}</span>`).join('')}
+                </div>
+                <p class="source-en text-base text-gray-600 mb-2 font-medium">מקור: ${item.sourceEn}</p>
+                <p class="text-base text-gray-800 font-medium">${item.definition.substring(0,100)}...</p>
+            </div>
+        `;
+    }
+
+    function renderCards(data) {
+        gridContainer.innerHTML = data.map(createCardHtml).join('');
+        noResultsMessage.classList.toggle('hidden', data.length > 0);
+        document.querySelectorAll('.word-card').forEach(card => card.addEventListener('click', () => openModal(card.dataset.id)));
+    }
+
+    function openModal(id) {
+        const word = dictionaryData.find(i => i.word === decodeURIComponent(id));
+        if(!word) return;
+        modalTitle.textContent = word.word;
+        modalBody.innerHTML = `
+            <p class="text-sm text-gray-600 mb-4">מקור באנגלית: <b>${word.sourceEn}</b></p>
+            <h3 class="text-xl font-semibold mt-6 mb-2 border-b border-amber-900 pb-1 text-amber-900">פירוש מלא:</h3>
+            <p class="text-lg mb-6 leading-relaxed">${word.definition}</p>
+        `;
+        modal.classList.remove('hidden');
+    }
+
+    function closeModal() { modal.classList.add('hidden'); }
+    closeButton.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if(e.target === modal) closeModal(); });
+
+    window.onload = async function() {
+        try {
+            const response = await fetch('terms.json');
+            dictionaryData = await response.json();
+            loadingMessage.classList.add('hidden');
+            renderCards(dictionaryData);
+        } catch (e) {
+            loadingMessage.textContent = 'שגיאה בטעינת נתוני המילון.';
+        }
+    };
+</script>
+</body>
+</html>
