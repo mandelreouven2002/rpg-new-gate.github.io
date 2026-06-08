@@ -8,7 +8,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/jpeg" href="image_e42063.jpg">
+    
+    <!-- אייקון ספציפי לתיקיית המבזקון או הפניה לראשי -->
+    <link rel="icon" type="image/png" href="msg-icon.png" onerror="this.src='/image_e42063.jpg'">
 
     <style>
         body { font-family: 'Assistant', sans-serif; background-color: #f9fafb; color: #1f2937; display: flex; flex-direction: column; min-height: 100vh; }
@@ -16,18 +18,17 @@
         .fade-in-up { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; transform: translateY(20px); }
         @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
         .delay-100 { animation-delay: 0.1s; } .delay-200 { animation-delay: 0.2s; } .delay-300 { animation-delay: 0.3s; }
-        .nav-link-msg { color: #facc15; font-weight: bold; }
     </style>
 </head>
 <body class="overflow-x-hidden">
 
-<!-- ה-Header יוזרק לכאן אוטומטית ע"י layout.js -->
+<!-- ה-Header יוזרק לכאן אוטומטית ע"י layout.js מהשורש -->
 
 <main class="flex-grow">
-    <!-- Hero Section -->
     <div class="relative min-h-screen flex flex-col items-center justify-center p-6 text-center bg-gradient-to-b from-orange-50 to-white pt-12">
         <div class="mb-8 fade-in-up">
-            <img src="image_e42063.jpg" alt="השער - דואר עוף-חול" class="w-40 h-40 md:w-56 md:h-56 object-contain mx-auto drop-shadow-2xl hover:scale-105 transition-transform duration-300 rounded-lg">
+            <!-- מפנה אבסולוטית לתמונת הלוגו הראשית בשורש האתר -->
+            <img src="/image_e42063.jpg" alt="השער - דואר עוף-חול" class="w-40 h-40 md:w-56 md:h-56 object-contain mx-auto drop-shadow-2xl hover:scale-105 transition-transform duration-300 rounded-lg">
         </div>
 
         <h1 class="text-5xl md:text-7xl font-black mb-4 text-gray-900 fade-in-up delay-100">
@@ -45,7 +46,6 @@
         </a>
     </div>
 
-    <!-- WhatsApp Preview Section -->
     <section class="py-20 bg-white relative overflow-hidden">
         <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-center gap-12">
             <div class="md:w-1/2 text-right z-10">
@@ -60,12 +60,11 @@
                 </ul>
             </div>
             
-            <!-- Chat Mockup -->
             <div class="md:w-1/2 flex justify-center w-full max-w-md z-10">
                 <div class="relative w-full bg-white rounded-2xl shadow-2xl overflow-hidden h-[500px] border border-gray-200 flex flex-col">
                     <div class="bg-[#075E54] p-4 flex items-center shadow-md relative z-10 text-white shrink-0">
                         <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center ml-3 overflow-hidden">
-                            <img src="image_e42063.jpg" class="w-full h-full object-cover">
+                            <img src="/image_e42063.jpg" class="w-full h-full object-cover">
                         </div>
                         <div><h3 class="font-bold text-base">דואר עוף-חול - השער</h3></div>
                     </div>
@@ -82,9 +81,8 @@
     </section>
 </main>
 
-<!-- ה-Footer יוזרק לכאן אוטומטית ע"י layout.js -->
-
-<script src="layout.js"></script>
+<!-- טעינת layout.js מהשורש -->
+<script src="/layout.js"></script>
 
 </body>
 </html>
