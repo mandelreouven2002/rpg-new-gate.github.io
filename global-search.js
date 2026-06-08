@@ -1,10 +1,10 @@
 /**
  * global-search.js
- * מבצע חיפוש רוחבי בכל משאבי האתר: קהילות (data.json), קודקס (terms.json) ומאמרים.
+ * מבצע חיפוש רוחבי בכל משאבי האתר מתוך תיקיות המשנה.
  */
 
 document.addEventListener("DOMContentLoaded", () => {
-    //    const searchInput = document.getElementById('global-search-input');
+    const searchInput = document.getElementById('global-search-input');
     const resultsContainer = document.getElementById('search-results-dropdown');
     
     if (!searchInput || !resultsContainer) return;
@@ -12,22 +12,22 @@ document.addEventListener("DOMContentLoaded", () => {
     let codexData = [];
     let communityData = [];
     let articlesData = [
-        { title: "מה זה משחקי תפקידים?", desc: "המדריך הבסיסי שמסביר את הקונספט של כניסה לנעלי דמות אחרת.", link: "articles.html" },
-        { title: "משחק תפקידים שולחני (TTRPG)", desc: "איך משחקים עם דף, עפרון וקוביות? צלילה לעולם סביב השולחן.", link: "articles.html" },
-        { title: "משחק חי (LARP)", desc: "לצאת מהשולחן וללבוש תחפושת. מה זה לארפ?", link: "articles.html" },
-        { title: "נימוסי שולחן ותרבות משחק", desc: "המדריך הלא-כתוב לשחקן המוצלח - איך להתנהג סביב השולחן.", link: "articles.html" },
-        { title: "מבוכים ודרקונים (D&D 5e)", desc: "סקירת השיטה הפופולרית ביותר בעולם.", link: "articles.html" },
-        { title: "פאת'פיינדר", desc: "עולם הפנטזיה העשיר של פאת'פיינדר.", link: "articles.html" }
+        { title: "מה זה משחקי תפקידים?", desc: "המדריך הבסיסי שמסביר את הקונספט של כניסה לנעלי דמות אחרת.", link: "/articles/what-is-rpg" },
+        { title: "משחק תפקידים שולחני (TTRPG)", desc: "איך משחקים עם דף, עפרון וקוביות? צלילה לעולם סביב השולחן.", link: "/articles/tabletop-rpg" },
+        { title: "משחק חי (LARP)", desc: "לצאת מהשולחן וללבוש תחפושת. מה זה לארפ?", link: "/articles/larp-explained" },
+        { title: "נימוסי שולחן ותרבות משחק", desc: "המדריך הלא-כתוב לשחקן המוצלח - איך להתנהג סביב השולחן.", link: "/articles/table-manners" }
     ];
 
     let isDataLoaded = false;
 
-    //    async function fetchResources() {
+    async function fetchResources() {
         try {
-            const termsRes = await fetch('terms.json');
+            // קריאה מתוך תיקיית הקודקס
+            const termsRes = await fetch('/codex/terms.json');
             if (termsRes.ok) codexData = await termsRes.json();
 
-            const dataRes = await fetch('data.json');
+            // קריאה מתוך תיקיית ה-go (חיפוש קהילות)
+            const dataRes = await fetch('/go/data.json');
             if (dataRes.ok) {
                 const json = await dataRes.json();
                 communityData = [...(json.communityData || []), ...(json.resourcesData || [])];
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
         performGlobalSearch(query);
     });
 
-    //    function performGlobalSearch(query) {
+    function performGlobalSearch(query) {
         const codexResults = codexData.filter(term => 
             term.word.toLowerCase().includes(query) || 
             term.sourceEn.toLowerCase().includes(query)
@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
         renderResults(codexResults, articleResults, communityResults, query);
     }
 
-    //    function renderResults(codex, articles, community, query) {
+    function renderResults(codex, articles, community, query) {
         resultsContainer.innerHTML = '';
         const totalResults = codex.length + articles.length + community.length;
         
@@ -107,8 +107,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (codex.length > 0) {
             html += `<div class="bg-gray-50 px-4 py-2 text-xs font-bold text-gray-500 tracking-wider">במילון המונחים (קודקס)</div>`;
             codex.forEach(term => {
+                // מפנה לתיקיית הקודקס
                 html += `
-                <a href="codex.html#${encodeURIComponent(term.word)}" class="block px-4 py-3 hover:bg-amber-50 transition-colors">
+                <a href="/codex/codex.html#${encodeURIComponent(term.word)}" class="block px-4 py-3 hover:bg-amber-50 transition-colors">
                     <div class="font-bold text-amber-700 text-sm mb-1">${term.word} <span class="text-gray-400 font-normal ml-1">(${term.sourceEn})</span></div>
                     <div class="text-xs text-gray-600 truncate">${term.definition.substring(0,60)}...</div>
                 </a>`;
@@ -119,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
             html += `<div class="bg-gray-50 px-4 py-2 text-xs font-bold text-gray-500 tracking-wider">בקהילות, אירועים וחנויות</div>`;
             community.forEach(item => {
                 html += `
-                <a href="${item.link || 'search.html'}" target="_blank" class="block px-4 py-3 hover:bg-green-50 transition-colors">
+                <a href="${item.link || '/go/search.html'}" target="_blank" class="block px-4 py-3 hover:bg-green-50 transition-colors">
                     <div class="flex items-center gap-2 mb-1">
                         <div class="font-bold text-green-700 text-sm">${item.name}</div>
                         ${item.location ? `<span class="text-[10px] bg-gray-200 text-gray-700 px-1.5 py-0.5 rounded">📍 ${item.location}</span>` : ''}
