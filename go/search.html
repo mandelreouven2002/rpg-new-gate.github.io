@@ -3,26 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>השער - פורטל חיפוש קהילות</title>
 
-    <!-- SEO: Optimized Title & Description -->
-    <title>השער - פורטל חיפוש</title>
-    <meta name="description" content="מחפשים קבוצת מבוכים ודרקונים? חוג לילדים? או חנות קוביות קרובה? פורטל החיפוש של שער להרפתקה מרכז את כל המידע על קהילת משחקי תפקידים בישראל במקום אחד.">
-    <meta name="theme-color" content="#312e81">
-
-    <link rel="icon" type="image/jpeg" href="image_e42063.jpg">
-
-    <!-- Performance Optimization -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/jpeg" href="/image_e42063.jpg">
 
     <style>
         body { font-family: 'Assistant', sans-serif; scroll-behavior: smooth; display: flex; flex-direction: column; min-height: 100vh; }
         .card { transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; }
         .card:hover { transform: translateY(-3px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
         .filter-btn.active { background-color: #4f46e5; color: white; }
-        #background-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-image: url('rpg-bg.png'); background-repeat: repeat; opacity: 0.025; pointer-events: none; }
+        #background-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-image: url('/rpg-bg.png'); background-repeat: repeat; opacity: 0.025; pointer-events: none; }
     </style>
 </head>
 
@@ -32,178 +24,93 @@
 <!-- ה-Header יוזרק לכאן אוטומטית ע"י layout.js -->
 
 <main class="container mx-auto p-4 md:p-8 flex-grow">
-
-    <!-- SEARCH HEADER SECTION -->
     <section class="text-center mb-10 pt-6">
         <h1 class="text-4xl md:text-5xl font-bold mb-4 text-stone-900">פורטל החיפוש</h1>
         <p class="max-w-2xl mx-auto text-xl text-stone-600 mb-8">
             חפשו קבוצות, חנויות, כנסים ופעילויות בכל הארץ במקום אחד מרוכז.
         </p>
 
-        <!-- Search Input -->
         <div class="max-w-2xl mx-auto mb-8 relative">
-            <label for="main-search-input" class="sr-only">חיפוש חופשי</label>
-            <input type="text" id="main-search-input"
-                   placeholder="מה אתם מחפשים? (שם, עיר, סוג משחק...)"
-                   class="w-full p-4 pr-12 text-lg border-2 border-indigo-200 rounded-full shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all">
-            <div class="absolute top-0 right-0 h-full flex items-center pr-4 text-stone-400">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-            </div>
+            <input type="text" id="main-search-input" placeholder="מה אתם מחפשים? (שם, עיר, סוג משחק...)" class="w-full p-4 pr-12 text-lg border-2 border-indigo-200 rounded-full shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all">
         </div>
 
-        <!-- Filters -->
         <div class="flex justify-center items-center gap-3 flex-wrap" id="filters-container">
-            <button class="filter-btn active px-4 py-2 rounded-full font-semibold bg-white shadow-sm hover:bg-indigo-50 border border-stone-200 transition-all text-base" data-filter="all">הכל</button>
-
-            <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm hover:bg-indigo-50 border border-stone-200 transition-all text-base" data-filter="organization">🏢 ארגון/עמותה</button>
-            <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm hover:bg-indigo-50 border border-stone-200 transition-all text-base" data-filter="event">📅 אירוע/כנס</button>
-            <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm hover:bg-indigo-50 border border-stone-200 transition-all text-base" data-filter="group">💬 קהילה/קבוצה</button>
-
-            <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm hover:bg-indigo-50 border border-stone-200 transition-all text-base" data-filter="store">🛍️ חנות/ציוד</button>
-            <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm hover:bg-indigo-50 border border-stone-200 transition-all text-base" data-filter="venue">🏰 מתחם משחקים</button>
-            <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm hover:bg-indigo-50 border border-stone-200 transition-all text-base" data-filter="activities">🎭 סדנאות והפעלות</button>
-            <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm hover:bg-indigo-50 border border-stone-200 transition-all text-base" data-filter="kids">🧒 חוגי ילדים</button>
+            <button class="filter-btn active px-4 py-2 rounded-full font-semibold bg-white shadow-sm border text-base" data-filter="all">הכל</button>
+            <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm border text-base" data-filter="organization">🏢 ארגון/עמותה</button>
+            <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm border text-base" data-filter="event">📅 אירוע/כנס</button>
+            <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm border text-base" data-filter="group">💬 קהילה/קבוצה</button>
+            <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm border text-base" data-filter="store">🛍️ חנות/ציוד</button>
+            <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm border text-base" data-filter="venue">🏰 מתחם משחקים</button>
         </div>
     </section>
 
-    <!-- RESULTS GRID -->
     <section id="results-section">
         <div id="results-count" class="text-stone-500 text-center mb-4 hidden">נמצאו <span id="count-number" class="font-bold">0</span> תוצאות</div>
-
+        
         <div id="results-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="col-span-full text-center py-10">
-                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-900"></div>
-                <p class="mt-2 text-stone-500">טוען נתונים...</p>
-            </div>
+            <div class="col-span-full text-center py-10 text-stone-500">טוען נתונים...</div>
         </div>
 
         <div id="no-results" class="hidden text-center py-12">
-            <div class="text-6xl mb-4">🔍</div>
             <h3 class="text-2xl font-bold text-stone-700 mb-2">לא נמצאו תוצאות</h3>
-            <p class="text-stone-500">נסו לשנות את מילות החיפוש או לבחור קטגוריה אחרת.</p>
             <button id="clear-search-btn" class="mt-4 text-indigo-600 font-semibold hover:underline">נקה חיפוש</button>
         </div>
-
-        <div class="text-center mt-10 mb-6">
-            <button id="load-more-btn" class="hidden px-6 py-3 rounded-md font-semibold bg-white shadow-md border border-stone-200 hover:bg-stone-50 text-indigo-600 transition-colors duration-200 text-base">
-                הצג תוצאות נוספות
-            </button>
-        </div>
     </section>
-
 </main>
 
-<!-- ה-Footer יוזרק לכאן אוטומטית ע"י layout.js -->
-
-<script src="layout.js"></script>
+<!-- טעינת ה-JS מתיקיית האב -->
+<script src="/layout.js"></script>
+<!-- מניח שקובץ הלוגיקה שלך נמצא ליד עמוד החיפוש -->
 <script src="search-engine.js"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const container = document.getElementById('results-container');
         const searchInput = document.getElementById('main-search-input');
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        const noResultsEl = document.getElementById('no-results');
-        const loadMoreBtn = document.getElementById('load-more-btn');
-        const resultsCountEl = document.getElementById('results-count');
-        const countNumberEl = document.getElementById('count-number');
-        const clearSearchBtn = document.getElementById('clear-search-btn');
-
+        const filterBtns = document.querySelectorAll('.filter-btn');
         let searchEngine = null;
-        let filteredResults = [];
-        let currentFilter = 'all';
-        let itemsToShow = 9;
 
+        // טעינה לוקאלית מתוך תיקיית go
         fetch('data.json')
             .then(res => res.json())
             .then(data => {
-                const combinedData = [...(data.communityData || []), ...(data.resourcesData || [])];
-                for (let i = combinedData.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [combinedData[i], combinedData[j]] = [combinedData[j], combinedData[i]];
-                }
-                searchEngine = new SearchEngine(combinedData, data.regions || []);
-                runSearch();
-            })
-            .catch(err => {
-                container.innerHTML = '<div class="col-span-full text-center text-red-600">שגיאה בטעינת נתונים</div>';
+                const combined = [...(data.communityData || []), ...(data.resourcesData || [])];
+                searchEngine = new SearchEngine(combined, data.regions || []);
+                runSearch('all');
             });
 
-        function runSearch() {
-            if (!searchEngine) return;
-            filteredResults = searchEngine.search(searchInput.value, currentFilter);
-            renderUI();
-        }
-
-        function getTypeInfo(typeStr) {
-            switch (typeStr) {
-                case 'organization': return { label: '🏢 ארגון/עמותה', color: 'bg-blue-100 text-blue-800' };
-                case 'event': return { label: '📅 אירוע/כנס', color: 'bg-purple-100 text-purple-800' };
-                case 'group': return { label: '💬 קהילה/קבוצה', color: 'bg-green-100 text-green-800' };
-                case 'store': return { label: '🛍️ חנות/ציוד', color: 'bg-yellow-100 text-yellow-800' };
-                case 'venue': return { label: '🏰 מתחם משחקים', color: 'bg-indigo-100 text-indigo-800' };
-                case 'activities': return { label: '🎭 סדנאות והפעלות', color: 'bg-orange-100 text-orange-800' };
-                case 'kids': return { label: '🧒 חוגי ילדים', color: 'bg-pink-100 text-pink-800' };
-                default: return { label: 'כללי', color: 'bg-gray-100 text-gray-800' };
-            }
-        }
-
-        function createCard(item) {
-            const types = searchEngine ? searchEngine.getItemTypes(item) : [];
-            const badgesHtml = types.map(t => {
-                const info = getTypeInfo(t);
-                return `<span class="text-sm font-semibold px-2 py-0.5 rounded-full ${info.color} whitespace-nowrap">${info.label}</span>`;
-            }).join('');
-
-            return `
-                <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="card block bg-white p-6 rounded-lg shadow-lg border border-stone-200 hover:border-indigo-400 h-full flex flex-col">
-                  <div class="flex flex-wrap items-baseline gap-2 mb-2">
-                    <h3 class="text-xl font-bold text-stone-800">${item.name ?? ''}</h3>
-                    ${badgesHtml}
-                  </div>
-                  ${item.location ? `<p class="text-base text-stone-500 mb-3 font-semibold">📍 ${item.location}</p>` : ''}
-                  <p class="text-base text-stone-600 flex-grow">${item.description ?? ''}</p>
-                </a>
-            `;
-        }
-
-        function renderUI() {
-            if (searchInput.value) {
-                resultsCountEl.classList.remove('hidden');
-                countNumberEl.textContent = filteredResults.length;
-            } else {
-                resultsCountEl.classList.add('hidden');
-            }
-
-            if (filteredResults.length === 0) {
+        function runSearch(filterType) {
+            if(!searchEngine) return;
+            const query = searchInput.value;
+            const results = searchEngine.search(query, filterType);
+            
+            if(results.length === 0) {
                 container.innerHTML = '';
-                noResultsEl.classList.remove('hidden');
-                loadMoreBtn.classList.add('hidden');
-                return;
+                document.getElementById('no-results').classList.remove('hidden');
             } else {
-                noResultsEl.classList.add('hidden');
+                document.getElementById('no-results').classList.add('hidden');
+                container.innerHTML = results.map(item => `
+                    <a href="${item.link}" target="_blank" class="card block bg-white p-6 rounded-lg shadow-lg border">
+                        <h3 class="text-xl font-bold text-stone-800">${item.name}</h3>
+                        ${item.location ? `<p class="text-sm text-stone-500 mt-2">📍 ${item.location}</p>` : ''}
+                        <p class="mt-2">${item.description || ''}</p>
+                    </a>
+                `).join('');
             }
-
-            const visibleItems = filteredResults.slice(0, itemsToShow);
-            container.innerHTML = visibleItems.map(createCard).join('');
-            loadMoreBtn.classList.toggle('hidden', visibleItems.length >= filteredResults.length);
         }
 
-        filterButtons.forEach(btn => {
+        filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                filterButtons.forEach(b => b.classList.remove('active'));
+                filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                currentFilter = btn.dataset.filter;
-                itemsToShow = 9;
-                runSearch();
+                runSearch(btn.dataset.filter);
             });
         });
 
-        searchInput.addEventListener('input', () => { itemsToShow = 9; runSearch(); });
-        loadMoreBtn.addEventListener('click', () => { itemsToShow += 9; renderUI(); });
-        clearSearchBtn.addEventListener('click', () => { searchInput.value = ''; itemsToShow = 9; runSearch(); });
+        searchInput.addEventListener('input', () => {
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+            runSearch(activeFilter);
+        });
     });
 </script>
 </body>
